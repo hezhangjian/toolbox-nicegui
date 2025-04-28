@@ -1,5 +1,5 @@
 [project]
-name = "pypi-package-name"
+name = "toolbox-nicegui"
 version = "0.0.1"
 readme = "README.md"
 

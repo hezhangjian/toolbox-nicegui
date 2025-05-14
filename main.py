@@ -1,5 +1,5 @@
 from nicegui import ui
-import json
+from services.ui_handlers import handle_json_format, handle_json_compress, handle_json_validate, clear_textareas
 
 
 @ui.page('/tools/json-formatter')
@@ -18,41 +18,10 @@ def json_formatter():
                 output_text = ui.textarea().classes('w-full h-64')
 
         with ui.row().classes('w-full gap-4 mt-4'):
-            ui.button('格式化', on_click=lambda: format_json(input_text, output_text)).classes('bg-blue-500')
-            ui.button('压缩', on_click=lambda: compress_json(input_text, output_text)).classes('bg-green-500')
-            ui.button('验证', on_click=lambda: validate_json(input_text)).classes('bg-purple-500')
+            ui.button('格式化', on_click=lambda: handle_json_format(input_text, output_text)).classes('bg-blue-500')
+            ui.button('压缩', on_click=lambda: handle_json_compress(input_text, output_text)).classes('bg-green-500')
+            ui.button('验证', on_click=lambda: handle_json_validate(input_text)).classes('bg-purple-500')
             ui.button('清空', on_click=lambda: clear_textareas(input_text, output_text)).classes('bg-gray-500')
-
-
-def format_json(input_text, output_text):
-    try:
-        data = json.loads(input_text.value)
-        output_text.value = json.dumps(data, indent=2, ensure_ascii=False)
-        ui.notify('格式化成功', type='positive')
-    except json.JSONDecodeError as e:
-        ui.notify(f'JSON格式错误: {str(e)}', type='negative')
-
-
-def compress_json(input_text, output_text):
-    try:
-        data = json.loads(input_text.value)
-        output_text.value = json.dumps(data, separators=(',', ':'), ensure_ascii=False)
-        ui.notify('压缩成功', type='positive')
-    except json.JSONDecodeError as e:
-        ui.notify(f'JSON格式错误: {str(e)}', type='negative')
-
-
-def validate_json(input_text):
-    try:
-        json.loads(input_text.value)
-        ui.notify('JSON格式正确', type='positive')
-    except json.JSONDecodeError as e:
-        ui.notify(f'JSON格式错误: {str(e)}', type='negative')
-
-
-def clear_textareas(input_text, output_text):
-    input_text.value = ''
-    output_text.value = ''
 
 
 @ui.page('/')
